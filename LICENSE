@@ -1,0 +1,75 @@
+KarRelay — licence terms
+========================
+
+Copyright (c) 2026 Alexander Karabatov. All rights reserved.
+
+KarRelay is proprietary software. It is not open source, and its source
+code is not published.
+
+
+Permission granted
+------------------
+
+You may download, install and run KarRelay, on as many machines as you
+like, for any purpose including commercial use, subject to the limits of
+the tier your installation is activated for. Free use requires no
+licence key.
+
+You may redistribute the unmodified release archive, keeping this notice
+and THIRD-PARTY-NOTICES.md with it.
+
+
+Not granted
+-----------
+
+Without written permission you may not:
+
+  - decompile, disassemble or reverse engineer the software, or attempt
+    to derive its source code, except to the extent that applicable law
+    expressly permits despite this restriction;
+  - modify or create derivative works of the software;
+  - remove, disable or circumvent the licensing and activation
+    mechanism, or the tier limits it enforces;
+  - sell, rent, sublicense or distribute the software as part of a
+    paid product or service without an agreement covering it.
+
+
+Tiers and activation
+--------------------
+
+Some capabilities require a paid activation, which is checked against an
+Ed25519-signed envelope cached locally so the relay keeps working
+offline. Which capabilities those are is stated in the documentation for
+each release. Transport encryption for the web interface will never be
+behind a paid tier.
+
+
+Third-party components
+----------------------
+
+The binary includes open-source components under their own licences,
+reproduced in full in THIRD-PARTY-NOTICES.md. Those licences govern
+those components, and nothing above restricts the rights they grant you
+in them.
+
+
+No warranty
+-----------
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+This software carries video for live production. Test it in your own
+setup, against your own encoders and receivers, before you rely on it
+for anything that matters.
+
+
+Contact
+-------
+
+Alexander Karabatov — https://github.com/unclekara
