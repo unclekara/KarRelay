@@ -3,7 +3,7 @@
 Low-latency SRT fan-out relay with frame-accurate timecode injection.
 One binary, no dependencies to install, a web interface for everything.
 
-[**Download 0.5.0**](https://github.com/unclekara/KarRelay/releases/latest)
+[**Download 0.6.0**](https://github.com/unclekara/KarRelay/releases/latest)
 · Windows and Linux, 64-bit
 
 > This repository carries the description and the releases. **KarRelay
@@ -46,6 +46,10 @@ encoder.
 - **Fan-out** with per-subscriber buffering. A slow viewer is dropped
   frames, never backpressure on the source.
 - **Stream-id whitelist** per source, in and out.
+- **SRT link encryption** (passphrase, AES-128/192/256), per direction
+  on a source and for a channel's subscribers. A peer with the wrong
+  passphrase, or none, is rejected rather than quietly served in the
+  clear.
 - H.264 and H.265, passthrough — nothing is re-encoded, so there is no
   added latency and no quality loss.
 - Live stats over a WebSocket: RTT, bitrate, loss, drops, viewer count,
@@ -90,6 +94,11 @@ so several screens showing the same feed show the same frame.
 - **Web interface** for sources, viewers, settings and licence state.
 - **Operator credentials** on the interface and the API. A fresh install
   accepts `admin` / `admin`; change both on the About tab.
+- **Listen address** — restrict the interface to one network, or to the
+  relay machine itself, and the port disappears from everywhere else.
+- **TLS** for the interface, one click, with a certificate generated for
+  you. HTTPS and plain HTTP share the port, so KarPlayer keeps syncing
+  its clock without needing the certificate.
 - **Rejection reasons** surfaced both to the operator and to the
   subscriber that was turned away, so "it won't connect" has an answer.
 
@@ -133,7 +142,8 @@ Everything above works without a licence key, within these limits:
 | Switching between sources | — | ✓ |
 | Timecode injection | — | ✓ |
 | API access from outside the local network | — | ✓ |
-| Stream-id whitelist, statistics, H.265 | ✓ | ✓ |
+| SRT link encryption, stream-id whitelist, statistics, H.265 | ✓ | ✓ |
+| Encrypted web interface (TLS) | ✓ | ✓ |
 
 Activation is checked once and cached locally, signed, so the relay
 keeps running with no network. A seven-day trial is available per
@@ -141,25 +151,28 @@ machine from the licence panel in the UI.
 
 ## Not built yet
 
-Named here because the absence matters more than the feature would:
-
-- **SRT link encryption** (passphrase). The protocol supports it and
-  KarRelay does not implement it yet, so a stream leaving the relay is
-  unencrypted on the wire. If the path between relay and viewer is not
-  one you control, treat the stream as readable.
-- **Encrypted web interface** (TLS) — see below.
-- **Push replication** to another KarRelay.
-
-None of these will ever be behind a paid tier. Security is not an
-upsell.
+- **Push replication** to another KarRelay. Free when it arrives.
 
 ## Security
 
-The web interface speaks plain HTTP today. The operator password stops
-unauthenticated changes and anything routed in from outside, but it is
-not hidden from someone capturing traffic on the same network. **Keep
-the interface on a network you trust.** Encrypted transport is the next
-thing on the list.
+0.6 is a security release. Three things, none of them behind a paid
+tier, and worth the minute each takes:
+
+1. **Change the password.** A fresh install accepts `admin` / `admin`
+   so you can get in; until you change it on the About tab, so can
+   anyone who can reach the port. The relay says so in its log on every
+   start.
+2. **Turn on TLS**, also on the About tab. Without it the password
+   crosses the network in the clear. The certificate is generated for
+   you and your browser will warn once because nobody signed it —
+   compare the fingerprint it shows with the one in the UI, then accept
+   it.
+3. **Narrow the listen address** if the interface is only ever opened
+   on the relay machine. That removes the port from every other network
+   rather than defending it.
+
+Separately, set a passphrase on your sources and channels if the path
+to your viewers is not one you control.
 
 If you find something security-relevant, please open an issue saying
 only that you have, and I will follow up for the detail.

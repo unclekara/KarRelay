@@ -3,6 +3,67 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
+## [0.6.0] — 2026-10-04
+
+A security release. 0.5.0 shipped an operator password that crossed the
+network in the clear, and said so. This closes that, and two more gaps
+that were open alongside it. None of it is behind a paid tier.
+
+### Transport encryption for the web interface
+
+Off by default — a generated certificate makes a browser complain, and
+an operator who did not ask for that should not meet it on a relay that
+worked yesterday. One click on the **About** tab to turn on.
+
+HTTPS and plain HTTP share the service port, told apart by the first
+byte of the connection. That is deliberate: KarPlayer is configured with
+one port, speaks plain HTTP and has no certificate store, so any other
+arrangement would have meant every installed player needing a settings
+change on upgrade day. The player's clock sync keeps working untouched;
+everything else over plain HTTP is redirected to https, and anything
+carrying credentials is refused rather than redirected, because
+redirecting it would invite the caller to send a password a second time
+when the first already crossed in the clear.
+
+The certificate is generated for you, valid ten years, and covers every
+name the interface might be opened under. **Compare the fingerprint**
+the UI and log show against what your browser shows — with a
+self-signed certificate that comparison is the whole of the security.
+Your own certificate and key can be used instead.
+
+### A listen address
+
+The relay bound every interface, so the port answered on every network
+the machine could see. It can now be restricted to one interface, or to
+the relay machine itself, which removes the port from the others rather
+than defending it.
+
+Chosen from a list of the machine's own addresses rather than typed, and
+an address the machine does not have is refused while the interface is
+still reachable to say so. If the address stops being bindable later — a
+DHCP lease moves, a machine is cloned — the relay falls back to loopback
+and logs it, rather than leaving you with no way in.
+
+### SRT link encryption
+
+The option had existed in the code since 0.1 and was read by nothing, so
+streams were always in the clear while the documentation said otherwise.
+Now real: a passphrase per direction on a source and one for a channel's
+subscribers, AES-128, 192 or 256. A peer with the wrong passphrase, or
+none, is rejected rather than quietly served an unencrypted link.
+
+Verified end to end with KarPlayer on a tablet, including source
+switching on an encrypted channel.
+
+### Also
+
+- Any libsrt receiver — KarPlayer, ffmpeg, vMix — no longer has its log
+  filled with `EPE: incoming UMSG: 6 INVALID SIZE: 0` several times a
+  second. 405 lines in 8 seconds before, zero now. The fix has been
+  [proposed upstream](https://github.com/datarhei/gosrt/pull/161).
+
+---
+
 ## [0.5.0] — 2026-10-04
 
 First public release.
