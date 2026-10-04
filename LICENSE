@@ -7,20 +7,48 @@ KarRelay is proprietary software. It is not open source, and its source
 code is not published.
 
 
-Permission granted
-------------------
+1. Permission granted
+---------------------
 
 You may download, install and run KarRelay, on as many machines as you
-like, for any purpose including commercial use, subject to the limits of
-the tier your installation is activated for. Free use requires no
-licence key.
+like, subject to the limits of the tier your installation is activated
+for. Free use requires no licence key.
 
-You may redistribute the unmodified release archive, keeping this notice
-and THIRD-PARTY-NOTICES.md with it.
+You may use it commercially and to earn money. Specifically, and without
+needing any further agreement, you may:
+
+  - use KarRelay in paid work — a broadcast, a stream, an event, a
+    venue installation — and charge your client whatever you charge;
+  - run it as part of your own infrastructure or production facility,
+    including one that serves paying customers;
+  - install it for a client as part of a job you are paid for, and
+    charge for that work.
+
+You may redistribute the unmodified release archive — for example to a
+client, or by mirroring the download — keeping this notice and
+THIRD-PARTY-NOTICES.md with it.
 
 
-Not granted
------------
+2. What needs an agreement
+--------------------------
+
+The distinction is between *using* KarRelay and *selling KarRelay
+itself*. You need a written agreement to:
+
+  - sell, rent or sublicense KarRelay, or charge anyone for the
+    software as such;
+  - bundle it into a product, appliance or hardware you sell, or
+    include it in a hosted service where access to KarRelay's own
+    features is what the customer is buying;
+  - redistribute it under another name, or present it as your own
+    software.
+
+If you are unsure which side of that line you are on, write and ask.
+The answer is usually yes and usually free.
+
+
+3. Not granted
+--------------
 
 Without written permission you may not:
 
@@ -29,23 +57,40 @@ Without written permission you may not:
     expressly permits despite this restriction;
   - modify or create derivative works of the software;
   - remove, disable or circumvent the licensing and activation
-    mechanism, or the tier limits it enforces;
-  - sell, rent, sublicense or distribute the software as part of a
-    paid product or service without an agreement covering it.
+    mechanism, or the tier limits it enforces.
 
 
-Tiers and activation
---------------------
+4. Tiers, activation and payment
+--------------------------------
 
-Some capabilities require a paid activation, which is checked against an
-Ed25519-signed envelope cached locally so the relay keeps working
-offline. Which capabilities those are is stated in the documentation for
-each release. Transport encryption for the web interface will never be
-behind a paid tier.
+Some capabilities require a paid activation, which is checked against a
+signed envelope cached locally so the relay keeps working offline. Which
+capabilities those are is stated in the documentation for each release.
+Transport encryption for the web interface will never be behind a paid
+tier.
+
+Paid activations are non-refundable once issued, except where refund is
+required by applicable law. If an activation does not work, that is a
+fault to be fixed rather than a refund question — write and it will be
+sorted out.
 
 
-Third-party components
-----------------------
+5. Term
+-------
+
+This licence is effective until terminated. It terminates automatically
+if you breach any of its terms. On termination you must stop using the
+software and remove your installations. Sections 6 and 7 survive
+termination.
+
+Termination of this licence does not by itself revoke a paid activation
+you hold, and nothing here is a licence to the third-party components in
+section 6 — those are governed by their own terms, which do not
+terminate with this one.
+
+
+6. Third-party components
+-------------------------
 
 The binary includes open-source components under their own licences,
 reproduced in full in THIRD-PARTY-NOTICES.md. Those licences govern
@@ -53,8 +98,8 @@ those components, and nothing above restricts the rights they grant you
 in them.
 
 
-No warranty
------------
+7. No warranty
+--------------
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
@@ -69,7 +114,23 @@ setup, against your own encoders and receivers, before you rely on it
 for anything that matters.
 
 
+8. Trademarks
+-------------
+
+SRT is a trademark of Haivision Systems Inc. KarRelay is not affiliated
+with, endorsed by, or sponsored by Haivision or the SRT Alliance.
+
+All other trademarks are the property of their respective owners.
+
+
 Contact
 -------
 
-Alexander Karabatov — https://github.com/unclekara
+Licensing, purchases and anything that needs an answer in writing:
+
+  Alexander Karabatov
+  hellokarabatov@gmail.com
+  https://github.com/unclekara
+
+Bug reports belong in the issue tracker; licensing questions are better
+by email.

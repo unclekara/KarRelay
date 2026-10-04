@@ -37,8 +37,11 @@ licence, and the copyright remains with the original authors.
 
 SRT (Secure Reliable Transport) is an open-source video transport
 protocol originally created and open-sourced by
-[Haivision](https://www.haivision.com/). KarRelay is not affiliated with,
-endorsed by, or sponsored by Haivision or the SRT Alliance.
+[Haivision](https://www.haivision.com/). SRT is a trademark of Haivision
+Systems Inc. KarRelay is not affiliated with, endorsed by, or sponsored
+by Haivision or the SRT Alliance.
+
+All other trademarks are the property of their respective owners.
 
 ---
 
