@@ -46,7 +46,6 @@ encoder.
 - **Fan-out** with per-subscriber buffering. A slow viewer is dropped
   frames, never backpressure on the source.
 - **Stream-id whitelist** per source, in and out.
-- **SRT link encryption** (passphrase).
 - H.264 and H.265, passthrough — nothing is re-encoded, so there is no
   added latency and no quality loss.
 - Live stats over a WebSocket: RTT, bitrate, loss, drops, viewer count,
@@ -134,15 +133,25 @@ Everything above works without a licence key, within these limits:
 | Switching between sources | — | ✓ |
 | Timecode injection | — | ✓ |
 | API access from outside the local network | — | ✓ |
-| SRT encryption, stream-id whitelist, stats, H.265 | ✓ | ✓ |
-| Encrypted web interface | ✓ | ✓ |
+| Stream-id whitelist, statistics, H.265 | ✓ | ✓ |
 
 Activation is checked once and cached locally, signed, so the relay
 keeps running with no network. A seven-day trial is available per
 machine from the licence panel in the UI.
 
-Transport encryption for the web interface will never be behind a paid
-tier.
+## Not built yet
+
+Named here because the absence matters more than the feature would:
+
+- **SRT link encryption** (passphrase). The protocol supports it and
+  KarRelay does not implement it yet, so a stream leaving the relay is
+  unencrypted on the wire. If the path between relay and viewer is not
+  one you control, treat the stream as readable.
+- **Encrypted web interface** (TLS) — see below.
+- **Push replication** to another KarRelay.
+
+None of these will ever be behind a paid tier. Security is not an
+upsell.
 
 ## Security
 
