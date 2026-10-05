@@ -3,12 +3,77 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
-> **Releases before 0.7.1 have been withdrawn.** Their entries stay
+> **Releases before 0.7.2 have been withdrawn.** Their entries stay
 > below, because the history of what changed is worth keeping, but the
 > binaries are no longer downloadable: 0.6.0 and earlier validate a
-> cached licence without checking the machine it was issued for, and
-> 0.7.0 reports a version that is not its own. If you are running one
-> of them, take 0.7.1.
+> cached licence without checking the machine it was issued for, 0.7.0
+> reports a version that is not its own, and 0.7.1 can run a stream
+> unencrypted while telling you it is encrypted (see 0.7.2 below). If
+> you are running any of them, take 0.7.2.
+
+## [0.7.2] — 2026-10-06
+
+What the relay runs is now what you saved. Every path that writes a
+source or a channel was checked against that, and four of them were
+not keeping it.
+
+### A replaced source could lose its encryption without saying so
+
+This is the one worth upgrading for.
+
+The interface never shows you a stream passphrase — it cannot, it is
+never sent to the browser — so saving a source you did not re-type one
+for means "keep the one you had". That worked for the stored
+configuration and not for the running stream: if the source was saved
+with autostart off and the relay had been restarted since, saving it
+again started it **without** the passphrase, while the file and the
+interface both went on reporting encryption.
+
+A subscriber with no passphrase was then let in, and one with the
+right passphrase was refused. Nothing in the log connected the two.
+
+If you have ever saved an encrypted source without re-entering its
+passphrase, check it: on 0.7.2, a client with no passphrase is refused
+as it should be.
+
+### A rejected change no longer half-happens
+
+Saving a source or channel the relay then refused to store used to
+leave it running anyway — bound to its port, pushing replicas, and
+absent from the configuration file. The interface said 400 and the
+relay carried on serving it until the next restart.
+
+Three more of the same shape, all now fixed:
+
+  * a rejected save could **delete the source it was replacing**,
+    from the file as well as from memory — you asked for a change,
+    got an error, and lost what was there;
+
+  * an unusable replication target started the source before it was
+    rejected, leaving it retrying against a target that was never
+    saved;
+
+  * two changes made at the same time — a rename while a replication
+    target was being edited, say — could each overwrite the other's,
+    with one of them answering success and quietly storing a stale
+    copy of the whole entry.
+
+Switching a channel is unaffected by any of this and never waits for a
+save: the cut is still the one thing that cannot be made to queue.
+
+### Caller sources can present a stream-id
+
+A source in caller mode now carries a stream-id of its own, which is
+what a sender filtering on one expects to see. Until now that field
+only existed for the subscriber side, so a caller could not reach such
+a sender at all. Up to 512 bytes, as SRT allows; over that it is
+refused when you save it rather than failing to connect for reasons
+nothing explains.
+
+### Upgrading
+
+Unpack over the old one. Config, licence and certificate are untouched,
+as before. Nothing in the API changed except the added field.
 
 ## [0.7.1] — 2026-10-05
 
