@@ -3,6 +3,92 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
+## [0.7.0] — 2026-10-05
+
+Push replication — the last thing the free/paid table promised and the
+relay did not do. Plus two fixes that had been waiting for a release.
+
+### Sending a copy to a second relay
+
+If your viewers are spread across sites, one link across the network
+beats one per viewer. KarRelay now dials a second KarRelay and sends it
+a single copy of what the local subscribers get; the far relay fans it
+out on its own network.
+
+```
+              ┌──SRT──▶ viewer
+  encoder ──▶ │──SRT──▶ viewer        site A
+   KarRelay   │
+              └──SRT──▶ KarRelay ──┬──SRT──▶ viewer
+                         site B    └──SRT──▶ viewer
+```
+
+It is also a standby path: if site A becomes unreachable, site B is
+already holding the stream for its own viewers.
+
+On the far relay, add a source in **listener** mode and note its input
+port. On this one, press **Replicate** on the source or channel you
+want sent and add a target with that host and port. The card then shows
+how many remotes are up.
+
+- A **channel's** targets receive the switched programme, not one of
+  its candidate sources. A **source's** targets receive what its own
+  subscribers receive, timecode injection included.
+- Targets are edited while everything is running. Adding, removing or
+  changing one leaves the others' connections untouched and does not
+  restart the source, so nobody watching notices.
+- A target **reconnects on its own** if the far relay restarts or the
+  link drops, backing off between attempts. Local viewers are not
+  disturbed while a remote is down, and the byte count does not reset
+  when it comes back.
+- **Disabled** keeps a target in the list without contacting it, for
+  pausing a remote without losing its settings.
+- Each target can carry **its own SRT passphrase**, independent of the
+  source's, matching the passphrase on the far relay's source.
+- Per-target state in the interface: connected or retrying, uptime,
+  bytes sent, drops, RTT, and the reason the last attempt failed.
+- A target pointing back at one of this relay's own ports is
+  **refused**, in whichever order the two settings were saved. That
+  would feed the stream into itself, and nothing about the symptoms
+  would say so — just a bitrate and a viewer count that make no sense.
+  Two *separate* relays pointed at each other cannot be detected from
+  one end and are not caught.
+
+Free on every licence, and it will stay that way.
+
+Measured between two relays: the hop comes up in well under a
+millisecond on a local network, the far relay reports no loss, and a
+viewer on it gets the stream unchanged. Killing the far relay leaves
+the local viewers untouched; the link returns by itself a few seconds
+after the remote comes back.
+
+### Fixed
+
+**A cached licence worked on any machine it was copied to.** An
+activation is issued for one install, and the file was not being
+checked against the machine it was loaded on — so copying it to a
+second relay activated that one too. The limit on machines per licence
+was applied when activating and bypassed entirely by the file. Now
+verified every time a cached activation is loaded.
+
+Found while writing tests, not from a report, and the check was
+confirmed against a real activation before being turned on: getting it
+subtly wrong would lock paying customers out of their own relay.
+
+**A crash when stopping a source while it was receiving.** Two parts of
+the relay could touch the same stream state at once during a stop.
+Rare, and only on the way down, but it took the process with it.
+
+### Also
+
+The retry delay after a failed input connection now stops growing at
+five seconds, as the documentation always said. It had been climbing to
+eight.
+
+`sei_metadata`, webhooks and interface branding are still not built.
+They are no longer on a roadmap either — see the note under the table
+in the README. Everything the free/paid table lists now exists.
+
 ## [0.6.0] — 2026-10-04
 
 A security release. 0.5.0 shipped an operator password that crossed the

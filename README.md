@@ -3,7 +3,7 @@
 Low-latency SRT fan-out relay with frame-accurate timecode injection.
 One binary, no dependencies to install, a web interface for everything.
 
-[**Download 0.6.0**](https://github.com/unclekara/KarRelay/releases/latest)
+[**Download 0.7.0**](https://github.com/unclekara/KarRelay/releases/latest)
 · Windows and Linux, 64-bit
 
 > This repository carries the description and the releases. **KarRelay
@@ -34,6 +34,7 @@ encoder.
   encoder ──SRT──▶  KarRelay  ──SRT──▶ viewer
                         │     ──SRT──▶ viewer
                         │     ──SRT──▶ recorder
+                        │     ──SRT──▶ KarRelay at another site
                         └── web UI on :8484
 ```
 
@@ -46,6 +47,9 @@ encoder.
 - **Fan-out** with per-subscriber buffering. A slow viewer is dropped
   frames, never backpressure on the source.
 - **Stream-id whitelist** per source, in and out.
+- **Push replication** to a second KarRelay: one copy across the
+  network instead of one per viewer, fanned out again at the far end,
+  and a standby path if this relay becomes unreachable.
 - **SRT link encryption** (passphrase, AES-128/192/256), per direction
   on a source and for a channel's subscribers. A peer with the wrong
   passphrase, or none, is rejected rather than quietly served in the
@@ -78,6 +82,29 @@ at — it took a while.
 > H.264 with H.264, or H.265 with H.265. Hardware decoders on the
 > receiving side are set up for one codec at the first frame and cannot
 > be changed mid-stream without dropping the session.
+
+**A second site**
+
+Viewers in more than one place do not each need a link back to the
+encoder. KarRelay pushes a single copy to a second KarRelay, which
+fans it out locally:
+
+```
+              ┌──SRT──▶ viewer
+  encoder ──▶ │──SRT──▶ viewer        site A
+   KarRelay   │
+              └──SRT──▶ KarRelay ──┬──SRT──▶ viewer
+                         site B    └──SRT──▶ viewer
+```
+
+Targets hang off a source or a switchable output — a switchable one
+sends the programme as cut, not one of its candidates. They are added
+and removed while everything is running, reconnect by themselves if
+the far relay restarts, and can carry their own passphrase. A target
+pointing back at this relay's own port is refused, because that feeds
+the stream into itself and nothing about the symptoms would say so.
+
+Free on every licence.
 
 **Timecode for frame-accurate sync**
 
@@ -144,6 +171,7 @@ Everything above works without a licence key, within these limits:
 | API access from outside the local network | — | ✓ |
 | SRT link encryption, stream-id whitelist, statistics, H.265 | ✓ | ✓ |
 | Encrypted web interface (TLS) | ✓ | ✓ |
+| Push replication to another KarRelay | ✓ | ✓ |
 
 Activation is checked once and cached locally, signed, so the relay
 keeps running with no network. A seven-day trial is available per
@@ -151,12 +179,18 @@ machine from the licence panel in the UI.
 
 ## Not built yet
 
-- **Push replication** to another KarRelay. Free when it arrives.
+Nothing in the table above is outstanding — push replication was the
+last of it, and arrived in 0.7.
+
+Custom metadata injection, webhooks on events and interface branding
+have been mentioned in earlier plans. They are not built and are not
+planned; if they ever appear they will not change what is free and what
+is paid.
 
 ## Security
 
-0.6 is a security release. Three things, none of them behind a paid
-tier, and worth the minute each takes:
+Three things, none of them behind a paid tier, and worth the minute
+each takes:
 
 1. **Change the password.** A fresh install accepts `admin` / `admin`
    so you can get in; until you change it on the About tab, so can
