@@ -3,6 +3,13 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
+> **Releases before 0.7.1 have been withdrawn.** Their entries stay
+> below, because the history of what changed is worth keeping, but the
+> binaries are no longer downloadable: 0.6.0 and earlier validate a
+> cached licence without checking the machine it was issued for, and
+> 0.7.0 reports a version that is not its own. If you are running one
+> of them, take 0.7.1.
+
 ## [0.7.1] — 2026-10-05
 
 A cosmetic release, but the cosmetics were lying about which build you
