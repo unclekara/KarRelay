@@ -3,6 +3,48 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
+## [0.7.1] — 2026-10-05
+
+A cosmetic release, but the cosmetics were lying about which build you
+were running.
+
+### The version shown was not the version running
+
+The web interface displayed **v1.4.2**. Windows file properties said
+**0.3.0.0**. The relay itself reported 0.7.0 at startup. All three
+were true at once, and had been for several releases.
+
+The interface's number was written into the page by hand and never
+touched again — and it could not have been anything else, because the
+version was never given to the web server in the first place. The page
+had nothing to read. It now comes from the relay, so it cannot
+disagree with it. If the page cannot reach the API it shows an
+ellipsis rather than a number, which is the honest answer to "which
+build is this".
+
+The file properties came from a resource compiled in May and carried
+into every build since.
+
+Both are fixed, and a test now compares every place the version is
+written down and fails when they drift apart. That is the part worth
+having: the numbers were wrong because nothing checked them.
+
+If you are on 0.7.0 and it reads **v1.4.2** in the corner, that is
+this bug and nothing else — the relay is 0.7.0 and works.
+
+### Operator credentials fits on the screen
+
+Four stacked full-width fields pushed **Save** below the fold on a
+laptop, which is the one control the section exists for. Two columns
+now: who you are on the left, what you are changing it to on the
+right.
+
+### Nothing else changed
+
+No change to the relay, the switching, replication, encryption or the
+API beyond one added field. Upgrading from 0.7.0 is optional unless
+the wrong version number bothers you.
+
 ## [0.7.0] — 2026-10-05
 
 Push replication — the last thing the free/paid table promised and the

@@ -3,7 +3,7 @@
 Low-latency SRT fan-out relay with frame-accurate timecode injection.
 One binary, no dependencies to install, a web interface for everything.
 
-[**Download 0.7.0**](https://github.com/unclekara/KarRelay/releases/latest)
+[**Download 0.7.1**](https://github.com/unclekara/KarRelay/releases/latest)
 · Windows and Linux, 64-bit
 
 > This repository carries the description and the releases. **KarRelay
