@@ -3,13 +3,45 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
-> **Releases before 0.7.2 have been withdrawn.** Their entries stay
+> **Releases before 0.7.3 have been withdrawn.** Their entries stay
 > below, because the history of what changed is worth keeping, but the
 > binaries are no longer downloadable: 0.6.0 and earlier validate a
 > cached licence without checking the machine it was issued for, 0.7.0
-> reports a version that is not its own, and 0.7.1 can run a stream
-> unencrypted while telling you it is encrypted (see 0.7.2 below). If
-> you are running any of them, take 0.7.2.
+> reports a version that is not its own, 0.7.1 can run a stream
+> unencrypted while telling you it is encrypted (see 0.7.2), and 0.7.2
+> cannot show or change a caller source's stream-id once it is set
+> (see 0.7.3). If you are running any of them, take 0.7.3.
+
+## [0.7.3] — 2026-10-06
+
+### The caller stream-id, visible and changeable
+
+0.7.2 added the field and left it write-once. The Add dialog was the
+only place that sent it, nothing showed it afterwards, and there is no
+edit dialog for a source — so once a caller source existed there was
+no way to see what stream-id it presents, and a typo meant deleting
+the source and building it again.
+
+The card now carries it as a **sid** chip. Click it to change it:
+
+  * the source re-dials with the new value immediately, and
+    **nobody watching the output is disturbed** — the output listener
+    and every subscriber on it stay up, only the input leg reconnects;
+
+  * if the source is not connected at all, which is the usual reason
+    you are changing this, the correction is tried at once rather than
+    waiting out the retry interval. That interval grows to five
+    seconds while a source is being refused, and the fix used to sit
+    behind it;
+
+  * clearing the field is a setting, not a cancel: an empty stream-id
+    means the source dials without one;
+
+  * a listener-mode source has no chip, because a listener receives a
+    stream-id rather than presenting one.
+
+Nothing else changed. Upgrading from 0.7.2 is worth it only if you use
+caller sources with a stream-id; unpack over the old one as usual.
 
 ## [0.7.2] — 2026-10-06
 
