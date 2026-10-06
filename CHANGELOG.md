@@ -3,14 +3,62 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
-> **Releases before 0.7.3 have been withdrawn.** Their entries stay
+> **Releases before 0.7.4 have been withdrawn.** Their entries stay
 > below, because the history of what changed is worth keeping, but the
 > binaries are no longer downloadable: 0.6.0 and earlier validate a
 > cached licence without checking the machine it was issued for, 0.7.0
 > reports a version that is not its own, 0.7.1 can run a stream
-> unencrypted while telling you it is encrypted (see 0.7.2), and 0.7.2
+> unencrypted while telling you it is encrypted (see 0.7.2), 0.7.2
 > cannot show or change a caller source's stream-id once it is set
-> (see 0.7.3). If you are running any of them, take 0.7.3.
+> (see 0.7.3), and 0.7.3 can tell you a change was saved when it was
+> not (see 0.7.4). If you are running any of them, take 0.7.4.
+
+## [0.7.4] — 2026-10-06
+
+### A change that could not be saved is no longer reported as saved
+
+Most of the settings pages applied your change to the running relay
+and then wrote it to the configuration file — and if that write
+failed, said nothing. Rename, the subscriber whitelist and the SEI
+toggle answered "done" with the relay running one thing and the file
+holding another. Delete was worse: it stopped the source, failed to
+write the file, answered "done", and the source came back the next
+time the relay started.
+
+These now store the change first and tell you if that fails. Nothing
+is applied that was not saved.
+
+The same went for the file itself. It was written in place, which
+means it was emptied and then filled: a save interrupted part-way — a
+full disk, a machine switched off at the wrong moment — left a
+configuration the relay could not read at all. It is now written
+alongside and swapped in, so the file on disk is always one complete
+configuration, the old one or the new one.
+
+On Windows a save can now fail with a sharing error if another program
+is holding the file open — a backup, an editor, a scanner. It retries
+for a fifth of a second first, and if it still cannot, it tells you
+and changes nothing. That is the trade for never leaving the file
+half-written.
+
+### Two smaller ones
+
+Editing a source or channel that is saved but not running — one with
+autostart off, after a restart — reported a failure. The edit had been
+saved; there was simply no live stream to apply it to.
+
+The stream-id chip could be left showing a value the relay had
+refused, or have a correction you were typing wiped out by the refusal
+of the previous attempt.
+
+### The About tab is now Settings
+
+Which is what it holds: your credentials, the service port, the listen
+address and TLS. The product information moves up beside the
+credentials, and the card that was itself called Settings is now
+**Web interface**.
+
+Unpack over the old one as usual.
 
 ## [0.7.3] — 2026-10-06
 
