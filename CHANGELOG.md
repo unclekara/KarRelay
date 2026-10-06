@@ -3,7 +3,7 @@
 User-facing changes to KarRelay. The source is not published, so this
 describes behaviour rather than code.
 
-> **Releases before 0.7.4 have been withdrawn.** Their entries stay
+> **Releases before 0.7.5 have been withdrawn.** Their entries stay
 > below, because the history of what changed is worth keeping, but the
 > binaries are no longer downloadable: 0.6.0 and earlier validate a
 > cached licence without checking the machine it was issued for, 0.7.0
@@ -11,7 +11,14 @@ describes behaviour rather than code.
 > unencrypted while telling you it is encrypted (see 0.7.2), 0.7.2
 > cannot show or change a caller source's stream-id once it is set
 > (see 0.7.3), and 0.7.3 can tell you a change was saved when it was
-> not (see 0.7.4). If you are running any of them, take 0.7.4.
+> not (see 0.7.4). 0.7.4 itself is sound — it is withdrawn only
+> because 0.7.5 replaces it. If you are running any of them, take
+> 0.7.5.
+
+## [0.7.5] — 2026-10-06
+
+A contact address on the About card, and nothing else. Everything in
+0.7.4 below applies unchanged.
 
 ## [0.7.4] — 2026-10-06
 
